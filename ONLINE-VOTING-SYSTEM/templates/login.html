@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login - AI Voting System</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    {% with messages = get_flashed_messages(with_categories=True) %} {% if
+    messages %}
+    <script>
+      {% for category, message in messages %}
+          Swal.fire({
+              title: '{{ message }}',
+              icon: "{{ 'success' if category == 'success' else 'error' }}",
+              showConfirmButton: false,
+              timer: 2000
+          });
+      {% endfor %}
+    </script>
+    {% endif %} {% endwith %}
+
+    <div class="container animate__animated animate__fadeInDown">
+      <h1 class="animate__animated animate__bounceInDown">Login</h1>
+
+      <form
+        action="/login"
+        method="POST"
+        class="animate__animated animate__fadeInUp"
+      >
+        <input
+          type="text"
+          name="username"
+          placeholder="Enter Username"
+          required
+        /><br /><br />
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter Password"
+          required
+        /><br /><br />
+        <button
+          type="submit"
+          class="btn animate__animated animate__pulse animate__infinite"
+        >
+          Login
+        </button>
+      </form>
+
+      <p>Don't have an account? <a href="/register">Register Here</a></p>
+    </div>
+
+    <script src="{{ url_for('static', filename='Style.js') }}"></script>
+  </body>
+</html>

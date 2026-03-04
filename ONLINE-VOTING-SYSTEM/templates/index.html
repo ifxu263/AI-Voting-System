@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI Voting System</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div class="container animate__animated animate__fadeIn">
+      <h1 class="animate__animated animate__bounceInDown">
+        Welcome to AI Powered Voting System
+      </h1>
+      <p class="animate__animated animate__fadeInUp">
+        Secure • Transparent • Smart
+      </p>
+
+      <div class="buttons animate__animated animate__zoomIn">
+        <a href="{{ url_for('login') }}" class="btn">Login</a>
+        <a href="{{ url_for('register') }}" class="btn">Register</a>
+        <a href="{{ url_for('admin') }}" class="btn">Admin Panel</a>
+      </div>
+    </div>
+
+    <div class="wrap"></div>
+
+    <!-- Chatbot -->
+    <div id="chatbot">
+      <div id="chat-header">AI Bot <span id="close-chat">×</span></div>
+      <div id="chat-body"></div>
+      <input type="text" id="chat-input" placeholder="Ask something..." />
+    </div>
+    <button id="chat-toggle">🤖 Chat</button>
+
+    <!-- Footer -->
+    <footer class="animated-footer">
+      <p>© 2025 Irfan’s Voting System. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JS Scripts -->
+    <script>
+      // Background triangles
+      const total = 200;
+      const wrap = document.querySelector(".wrap");
+
+      for (let i = 0; i < total; i++) {
+        const tri = document.createElement("div");
+        tri.className = "tri";
+        const size = Math.floor(Math.random() * 50);
+        const rotate = Math.floor(Math.random() * 360);
+        tri.style.borderTop = `${size}px solid hsla(${Math.floor(
+          Math.random() * 360
+        )}, 100%, 50%, 0.8)`;
+        tri.style.borderRight = `${size}px solid transparent`;
+        tri.style.borderLeft = `${size}px solid transparent`;
+        tri.style.marginLeft = `-${size / 2}px`;
+        tri.style.marginTop = `-${size / 2}px`;
+        tri.style.transform = `rotate(${rotate}deg) translate3d(0, 0, -1500px) scale(0)`;
+        tri.style.animation = `triangleAnim 10s infinite linear`;
+        tri.style.animationDelay = `${i * -0.05}s`;
+        tri.style.opacity = 0;
+        wrap.appendChild(tri);
+      }
+
+      // Parallax effect
+      document.addEventListener("mousemove", (e) => {
+        const container = document.querySelector(".container");
+        const { clientX: x, clientY: y } = e;
+        const moveX = (x - window.innerWidth / 2) * 0.02;
+        const moveY = (y - window.innerHeight / 2) * 0.02;
+        container.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.02)`;
+      });
+
+      document.addEventListener("mouseleave", () => {
+        document.querySelector(".container").style.transform =
+          "translate(0, 0) scale(1)";
+      });
+
+      // Chatbot functionality
+      const chatbot = document.getElementById("chatbot");
+      const chatToggle = document.getElementById("chat-toggle");
+      const chatInput = document.getElementById("chat-input");
+      const chatBody = document.getElementById("chat-body");
+      const closeChat = document.getElementById("close-chat");
+
+      chatToggle.onclick = () => {
+        chatbot.style.display =
+          chatbot.style.display === "flex" ? "none" : "flex";
+      };
+      closeChat.onclick = () => (chatbot.style.display = "none");
+
+      chatInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          const msg = chatInput.value.trim();
+          if (!msg) return;
+          addMessage("You", msg);
+          respond(msg.toLowerCase());
+          chatInput.value = "";
+        }
+      });
+
+      function addMessage(sender, text) {
+        const msgDiv = document.createElement("div");
+        msgDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+        chatBody.appendChild(msgDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+
+      function respond(input) {
+        let response = "I'm not sure about that.";
+        if (input.includes("login"))
+          response = "Click the Login button above to sign in.";
+        else if (input.includes("register"))
+          response = "Click Register to create an account.";
+        else if (input.includes("admin"))
+          response = "Use the Admin Panel if you're an administrator.";
+        else if (input.includes("vote"))
+          response = "After login, you can vote in active events.";
+        else if (input.includes("result"))
+          response = "You can view results after logging in.";
+        else if (input.includes("problem"))
+          response = "Please explain your issue and I’ll try to help!";
+
+        setTimeout(() => addMessage("Bot", response), 500);
+      }
+    </script>
+  </body>
+</html>

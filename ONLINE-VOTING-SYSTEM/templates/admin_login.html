@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Login</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Style.css') }}"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body class="admin-login">
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <script>
+      {% for category, msg in messages %}
+          Swal.fire({
+              icon: "{{ 'success' if category == 'success' else 'error' }}",
+              title: '{{ msg }}',
+              timer: 2500,
+              showConfirmButton: false
+          });
+      {% endfor %}
+    </script>
+    {% endif %} {% endwith %}
+
+    <div class="container animate__animated animate__fadeInDown">
+      <h1 class="animate__animated animate__bounceInDown">🔐 Admin Login</h1>
+
+      <form action="{{ url_for('admin') }}" method="POST">
+        <input
+          type="text"
+          name="username"
+          placeholder="Admin Username"
+          required
+        /><br /><br />
+        <input
+          type="password"
+          name="password"
+          placeholder="Admin Password"
+          required
+        /><br /><br />
+        <button type="submit" class="btn">Login</button>
+      </form>
+
+      <br />
+      <a href="{{ url_for('home') }}" class="btn">← Back to Home</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2>🛠 Admin Voting Event Dashboard</h2>
+
+      <!-- Add Event Form -->
+      <form method="POST">
+        <input
+          type="text"
+          name="title"
+          placeholder="Event Title"
+          required
+        /><br />
+        <input
+          type="text"
+          name="description"
+          placeholder="Event Description"
+        /><br />
+        <input type="date" name="date" required /><br />
+        <button type="submit" name="add_event" class="btn">➕ Add Event</button>
+      </form>
+
+      <hr />
+
+      <!-- List Existing Events -->
+      <h3>📋 Existing Events</h3>
+      {% for event in events %}
+      <!-- Inside {% for event in events %} loop -->
+      <form method="POST" style="display: inline">
+        <input type="hidden" name="event_id" value="{{ event['id'] }}" />
+        {% if event['is_active'] == 0 %}
+        <button name="activate_event" class="btn">Activate</button>
+        {% else %}
+        <button
+          name="deactivate_event"
+          class="btn"
+          style="background-color: red"
+        >
+          Deactivate
+        </button>
+        {% endif %}
+      </form>
+
+      <div style="margin-bottom: 15px">
+        <strong>{{ event['title'] }}</strong><br />
+        {{ event['description'] }}<br />
+        {{ event['date'] }}
+        <form method="POST" style="display: inline">
+          <input type="hidden" name="event_id" value="{{ event['id'] }}" />
+          <button
+            type="submit"
+            name="delete_event"
+            class="btn"
+            style="background: red"
+          >
+            🗑 Delete
+          </button>
+        </form>
+      </div>
+      {% else %}
+      <p>No events added yet.</p>
+      {% endfor %}
+
+      <br /><a href="/admin/logout" class="btn">🚪 Logout</a>
+    </div>
+  </body>
+</html>

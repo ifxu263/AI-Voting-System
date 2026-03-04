@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Voting Results</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>📊 Live Voting Results</h1>
+
+      <table class="results-table">
+        <tr>
+          <th>Candidate</th>
+          <th>Votes</th>
+        </tr>
+        {% for candidate in candidates %}
+        <tr>
+          <td>{{ candidate['name'] }}</td>
+          <td>{{ candidate['votes'] }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+
+      <br /><a href="{{ url_for('logout') }}" class="btn">Exit</a>
+    </div>
+  </body>
+</html>

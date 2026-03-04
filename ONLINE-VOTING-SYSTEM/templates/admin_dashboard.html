@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='Style.css') }}"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      .delete-btn {
+        background-color: red;
+        transition: transform 0.2s ease;
+      }
+      .delete-btn:hover {
+        transform: scale(1.1);
+      }
+    </style>
+  </head>
+  <body>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+     
+    {% endif %} {% endwith %}
+
+    <div class="container">
+      <h2>🛠 Admin Voting Event Dashboard</h2>
+      <hr />
+      <h3>👤 Add Candidate</h3>
+      <form method="POST">
+        <input
+          type="text"
+          name="candidate_name"
+          placeholder="Candidate Name"
+          required
+        /><br />
+        <select name="event_id" required>
+          <option value="">Select Event</option>
+          {% for event in events %}
+          <option value="{{ event.id }}">{{ event.title }}</option>
+          {% endfor %}</select
+        ><br />
+        <button type="submit" name="add_candidate" class="btn">
+          Add Candidate
+        </button>
+      </form>
+
+      <hr />
+      <h3>📋 Candidates by Event</h3>
+      {% for event in events %}
+      <h4>{{ event.title }}</h4>
+      <ul>
+        {% for c in candidates if c.event_id == event.id %}
+        <li>
+          {{ c.name }}
+          <form method="POST" style="display: inline">
+            <input
+              type="hidden"
+              name="delete_candidate_id"
+              value="{{ c.id }}"
+            />
+            <button
+              type="submit"
+              name="delete_candidate"
+              class="btn delete-btn"
+            >
+              🗑 Remove
+            </button>
+          </form>
+        </li>
+        {% else %}
+        <li>No candidates yet</li>
+        {% endfor %}
+      </ul>
+      {% endfor %}
+
+      <!-- Add Event Form -->
+      <form method="POST">
+        <input
+          type="text"
+          name="title"
+          placeholder="Event Title"
+          required
+        /><br />
+        <input
+          type="text"
+          name="description"
+          placeholder="Event Description"
+        /><br />
+        <input type="date" name="date" required /><br />
+        <button type="submit" name="add_event" class="btn">➕ Add Event</button>
+      </form>
+
+      <hr />
+
+      <h3>📋 Existing Events</h3>
+      {% for event in events %}
+      <div
+        style="
+          margin-bottom: 15px;
+          background-color: rgba(255, 255, 255, 0.05);
+          padding: 10px;
+          border-radius: 10px;
+        "
+      >
+        <strong>{{ event['title'] }}</strong><br />
+        {{ event['description'] }}<br />
+        📅 {{ event['date'] }}<br />
+        Status: {% if event['is_active'] %}
+        <span style="color: limegreen">🟢 Active</span>
+        {% else %}
+        <span style="color: red">🔴 Inactive</span>
+        {% endif %}
+
+        <form method="POST" style="display: inline">
+          <input type="hidden" name="event_id" value="{{ event['id'] }}" />
+          {% if event['is_active'] == 0 %}
+          <button name="activate_event" class="btn">Activate</button>
+          {% else %}
+          <button name="deactivate_event" class="btn" style="background: red">
+            Deactivate
+          </button>
+          {% endif %}
+        </form>
+
+        <form method="POST" style="display: inline">
+          <input type="hidden" name="event_id" value="{{ event['id'] }}" />
+          <button
+            type="submit"
+            name="delete_event"
+            class="btn"
+            style="background: red"
+          >
+            🗑 Delete
+          </button>
+        </form>
+      </div>
+      {% else %}
+      <p>No events added yet.</p>
+      {% endfor %}
+
+      <br />
+      <a href="/admin/logout" class="btn">🚪 Exit to Home</a>
+    </div>
+    <input type="time" name="start_time" required /><br />
+<input type="number" name="duration_minutes" placeholder="Duration (minutes)" required /><br />
+<input type="number" name="duration_minutes" placeholder="Duration (minutes)" required />
+
+
+  </body>
+</html>

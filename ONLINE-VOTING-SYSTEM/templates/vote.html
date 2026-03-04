@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vote Now</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div class="container animate__animated animate__fadeInDown">
+    <h1>🗳 Vote for Your Candidate</h1>
+
+    {% if already_voted %}
+        <script>
+            Swal.fire({
+                title: "You have already voted!",
+                icon: "info",
+                showConfirmButton: false,
+                timer: 2500
+            });
+        </script>
+        <p>You have already voted in this event: <strong>{{ active_event['title'] }}</strong></p>
+        <a href="{{ url_for('logout') }}" class="btn">🚪 Exit</a>
+    {% else %}
+        <h3>Event: <span style="color: yellow;">{{ active_event['title'] }}</span></h3>
+        <form method="POST">
+            {% for candidate in candidates %}
+                <div class="candidate-option animate__animated animate__fadeInUp">
+                    <input type="radio" name="candidate" value="{{ candidate['id'] }}" id="cand{{ candidate['id'] }}" required>
+                    <label for="cand{{ candidate['id'] }}">{{ candidate['name'] }}</label>
+                </div>
+            {% endfor %}
+            <br>
+            <button type="submit" class="btn animate__animated animate__pulse animate__infinite">🗳 Submit Vote</button>
+        </form>
+    {% endif %}
+</div>
+
+</body>
+</html>
